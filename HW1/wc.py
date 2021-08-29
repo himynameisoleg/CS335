@@ -1,8 +1,8 @@
 import sys
 
 def main():
-    # filename = sys.argv[0]
-    file = "healthyeating.txt"
+    file = sys.argv[1]
+    # file = "healthyeating.txt"
 
     lines = len(open(file).readlines())
     unique = get_unique_words(file)
@@ -14,7 +14,8 @@ def main():
 
 
     print(f'lines: {lines}, unique: {unique}, words: {words}, chars: {chars}')
-    print(f'Most frequent word: {most_freq["word"]} ({most_freq["count"]} times), Less frequent word: {less_freq["word"]} ({less_freq["count"]} times).')
+    print(f'Most frequent word: {most_freq["word"]} ({most_freq["count"]} times),',
+        f'Less frequent word: {less_freq["word"]} ({less_freq["count"]} {"time" if less_freq["count"] < 2 else "times"}).')
 
 def get_words(file):
     return len(open(file).read().lower().split())
@@ -49,4 +50,4 @@ def get_less_freq(file):
     freq["count"] = words.count(freq["word"])
     return freq
 
-main();
+main()
