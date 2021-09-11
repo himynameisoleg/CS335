@@ -8,7 +8,19 @@ class Greetings:
         "Happy to make your aquaintence"
     ]
 
+    LEAD_INS = [
+        "How is your day going today?",
+        "How are you?",
+        "How's it goin?", 
+        "How can I help you?"
+    ]
+
     @staticmethod
-    def get_msg(name):
-        return f"{random.choice(Greetings.GREETINGS)}, {name}.\nHow can I help you?\n"
+    def get_welcome_msg(username, botname):
+        welcome = (f"{random.choice(Greetings.GREETINGS)}, {username}.\n"
+            f"My name is {botname}.\n"
+           f"{random.choice(Greetings.LEAD_INS)}\n"
+        )
+        
+        return welcome
        
