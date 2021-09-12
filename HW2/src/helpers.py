@@ -16,3 +16,12 @@ class Helpers:
     def get_question_regex(msg):
         reg = re.findall(rf'\?', msg)
         return True if reg else False
+    
+    def get_directed_question_regex(msg):
+        reg = re.findall(rf'you', msg, re.IGNORECASE)
+        return True if reg else False
+
+    def get_past_tense_regex(msg):
+        reg = re.findall(rf'(\w+)ed\b', msg, re.IGNORECASE)
+        if reg:
+            return reg[0]

@@ -11,15 +11,15 @@ class Greetings:
     LEAD_INS = [
         "How is your day going today?",
         "How are you?",
-        "How's it goin?", 
-        "How can I help you?"
+        "How's it goin?",
+        "Whats up?"
     ]
 
     @staticmethod
     def get_welcome_msg(username, botname):
         welcome = (f"{random.choice(Greetings.GREETINGS)}, {username}.\n"
             f"My name is {botname}.\n"
-           f"{random.choice(Greetings.LEAD_INS)}\n"
+            f"{random.choice(Greetings.LEAD_INS)}\n"
         )
         
         return welcome

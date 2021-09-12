@@ -33,6 +33,7 @@ def begin_dialog():
             context.question = Sentiment.get_question_sentiment(context.msg)
             context.relationship = Sentiment.get_relationship_sentiment(context.msg)
             context.response = Sentiment.get_response_sentiment(context.msg)
+            context.tense = Sentiment.get_past_tense_sentiment(context.msg)
 
             bot.respond_with_context(context)
 

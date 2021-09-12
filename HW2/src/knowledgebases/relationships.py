@@ -11,10 +11,16 @@ class Relationships:
         "brother",
         "wife",
         "husband",
-        "friend",
         "boyfriend",
         "girlfriend",
-        "partner"
+        "partner",
+        "child",
+        "children",
+        "son", 
+        "daughter",
+        "neice",
+        "nephew",
+        "friend",
     ]
 
     @staticmethod

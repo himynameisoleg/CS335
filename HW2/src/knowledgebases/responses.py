@@ -3,8 +3,8 @@ import random
 
 class Responses:
     YES = ["yes", "yea", "ya"]
-    NO = ["no", "nope"]
-    MAYBE = ["maybe"]
+    NO = ["no", "nope", "nah"]
+    MAYBE = ["maybe" "sure", "perhaps"]
 
     @staticmethod
     def get_response(msg):

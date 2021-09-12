@@ -1,9 +1,9 @@
 import re
 
 class Feelings:
-    POSITIVE = ["good", "well", "great", "amazing", "happy", "joyful", "wonderful", "excit", "glad", "sweet"]
-    NEGATIVE = ["bad", "dissapoint", "upset", "not good", "angry", "annoy"]
-    NEUTRAL = ["fine", "normal"]
+    POSITIVE = ["good", "well", "great", "amazing", "happy", "joyful", "wonderful", "excit", "glad", "sweet", "fantastic","smart", "beautiful","positive","optimistic"]
+    NEGATIVE = ["bad", "dissapoint", "upset", "not good", "angry", "annoy", "sad", "mean", "weird", "smelly", "rude", "stupid", "depressed","upset", "worthless", "negative"]
+    NEUTRAL = ["fine", "normal", "not bad", "neutral", "so-so", "so so"]
     
     @staticmethod
     def has_regex_match(word, msg):

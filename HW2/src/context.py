@@ -8,9 +8,13 @@ class Context:
     }
     question = {
         "is_question": False,
-        "topic": ""
+        "is_directed_at_bot": False
     }
     response = {
         "is_response": False,
         "response": ""
+    }
+    tense = {
+        "is_past_tense": False,
+        "word": ""
     }
