@@ -16,6 +16,7 @@ def begin_dialog():
     context.msg = input("Hi, what's your name? \n")
     user.name = Helpers.get_name(Helpers, context.msg)
     context.msg = input(Greetings.get_welcome_msg(user.name, bot.name))
+    context.user = user
      
     #dialog begins
     goodbye = False
@@ -31,6 +32,7 @@ def begin_dialog():
             context.feeling = Sentiment.get_feeling_sentiment(context.msg)
             context.question = Sentiment.get_question_sentiment(context.msg)
             context.relationship = Sentiment.get_relationship_sentiment(context.msg)
+            context.response = Sentiment.get_response_sentiment(context.msg)
 
             bot.respond_with_context(context)
 

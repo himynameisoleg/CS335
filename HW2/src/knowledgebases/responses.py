@@ -1,4 +1,5 @@
 import re
+import random
 
 class Responses:
     YES = ["yes", "yea", "ya"]
@@ -8,13 +9,13 @@ class Responses:
     @staticmethod
     def get_response(msg):
         for word in Responses.YES:
-            if re.match(f'\b{word}\b', msg.lower()):
-                return "yes"
+            if re.match(rf"\b{word}\b", msg, re.IGNORECASE):
+                return random.choice(["Yes? Why is that?", "Oh yea?", "No way! Really?"])
 
         for word in Responses.NO:
-            if re.match(f'\b{word}\b', msg.lower()):
-                return "no"
+            if re.match(rf"\b{word}\b", msg, re.IGNORECASE):
+                return random.choice(["Oh, why not?", "No? How come?", "Why do you say No?"])
 
         for word in Responses.MAYBE:
-            if re.match(f'\b{word}\b', msg.lower()):
-                return "maybe well circle back "
+            if re.match(rf"\b{word}\b", msg, re.IGNORECASE):
+                return random.choice(["Maybe so...", "Maybe lets circle back?", "Yea, maybe..."])

@@ -11,11 +11,15 @@ class Relationships:
         "brother",
         "wife",
         "husband",
-        "friend"
+        "friend",
+        "boyfriend",
+        "girlfriend",
+        "partner"
     ]
 
     @staticmethod
     def get_relationship(msg):
         for name in Relationships.RELATIONSHIPS:
-            if re.match(f'{name}\w', msg):
-                return name 
+            reg = re.findall(rf'{name}*\S', msg)
+            if reg:
+                return reg[0]

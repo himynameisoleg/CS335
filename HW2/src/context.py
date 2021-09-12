@@ -1,4 +1,5 @@
 class Context:
+    user = None
     msg = ""
     feeling = ""
     relationship = {
@@ -11,5 +12,5 @@ class Context:
     }
     response = {
         "is_response": False,
-        "type": ""
+        "response": ""
     }

@@ -1,25 +1,27 @@
 import re
 
 class Feelings:
-    POSITIVE = ["well", "good", "great", "amazing", "happy", "joyful", "wonderful", "excit", "glad"]
-    NEGATIVE = ["dissapoint", "upset", "bad", "not good", "angry", "annoy"]
+    POSITIVE = ["good", "well", "great", "amazing", "happy", "joyful", "wonderful", "excit", "glad", "sweet"]
+    NEGATIVE = ["bad", "dissapoint", "upset", "not good", "angry", "annoy"]
     NEUTRAL = ["fine", "normal"]
     
+    @staticmethod
     def has_regex_match(word, msg):
-        return re.match(f'{word}\w+|\b{word}\b', msg.lower())
+        reg = re.findall(rf'{word}*\S', msg, re.IGNORECASE)
+        return True if reg else False
 
     @staticmethod
-    def get_feeling(self, msg):
+    def get_feeling(msg):
         for word in Feelings.NEGATIVE:
-            if self.has_regex_match(word, msg):
+            if Feelings.has_regex_match(word, msg):
                 return "negative"
 
         for word in Feelings.POSITIVE:
-            if self.has_regex_match(word, msg):
+            if Feelings.has_regex_match(word, msg):
                 return "positive"
 
         for word in Feelings.NEUTRAL:
-            if self.has_regex_match(word, msg):
+            if Feelings.has_regex_match(word, msg):
                 return "neutral"
     
     

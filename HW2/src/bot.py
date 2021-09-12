@@ -1,3 +1,5 @@
+import random
+
 class Bot:
 
     def __init__(self, name):
@@ -8,7 +10,16 @@ class Bot:
 
     def respond_with_context(self, context):
         if context.question["is_question"]:
-            self.respond("Hmm good question, IDK")
+            self.respond(
+                random.choice([
+                    "Hmm good question.",
+                    f"That's a great question, {context.user.name}",
+                    "Excellent question."
+                ])
+            )
+
+        if context.response["is_response"]:
+            self.respond(context.response["response"])
 
         elif context.relationship["is_relationship"]:
             self.respond(f"Tell me more about your {context.relationship['name']}.")
@@ -17,4 +28,15 @@ class Bot:
             self.respond(f"Sounds like you are feeling {context.feeling}.")
         
         else:
-            self.respond(f"Hmm idk that one...")
+            self.respond(
+                random.choice([
+                    "Hmm ok, so what then?",
+                    "Interesting. Tell me more.",
+                    "Mhmm... anyways",
+                    "Let's change the topic, im getting bored.",
+                    "Wanna gossip about someone?",
+                    "Anyways, why dont you tell me about someone in your life."
+                    "What else?",
+                    "Uhuh uhuh..."
+                    ])
+            )

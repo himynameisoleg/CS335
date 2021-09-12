@@ -5,10 +5,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Python: Attach using Process Id",
+            "name": "debug bot",
             "type": "python",
-            "request": "attach",
-            "processId": "${command:pickProcess}"
+            "request": "launch",
+            "program": "./main.py",
+            "console": "integratedTerminal"
         }
     ]
 }
