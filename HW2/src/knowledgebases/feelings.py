@@ -2,7 +2,7 @@ import re
 
 class Feelings:
     POSITIVE = ["good", "well", "great", "amazing", "happy", "joyful", "wonderful", "excit", "glad", "sweet", "fantastic","smart", "beautiful","positive","optimistic"]
-    NEGATIVE = ["bad", "dissapoint", "upset", "not good", "angry", "annoy", "sad", "mean", "weird", "smelly", "rude", "stupid", "depressed","upset", "worthless", "negative"]
+    NEGATIVE = ["bad", "dissapoint", "not so good", "upset", "not good", "angry", "annoy", "sad", "mean", "weird", "smelly", "rude", "stupid", "depressed","upset", "worthless", "negative"]
     NEUTRAL = ["fine", "normal", "not bad", "neutral", "so-so", "so so"]
     
     @staticmethod

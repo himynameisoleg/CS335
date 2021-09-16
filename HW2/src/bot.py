@@ -17,7 +17,7 @@ class Bot:
                 self.respond(
                     random.choice([
                         f"Me? Lets talk about you, {name}.",
-                        f"{name}, lets not talk about me so much.",
+                        f"{name}, lets not talk about me so much. Tell me something about, how about someone you know?",
                         f"Lets get back to you, {name}. What did you do yesterday?",
                         f"Was that supposed to be a question for me?",
                         f"You insist on asking questions about me, what about you {name}?"
@@ -32,19 +32,34 @@ class Bot:
                     ])
                 )
 
-        if context.response["is_response"]:
+        elif context.response["is_response"]:
             self.respond(context.response["response"])
 
-        if context.tense["is_past_tense"]:
+        elif context.tense["is_past_tense"]:
             word = context.tense["word"]
-
-            self.respond(
-                random.choice([
-                   f"And do you like to {word}?",
-                   f"Tell me more about how you {word}?",
-                   f"Wait, you {word}ed? What do you mean?"
-                ])
-            )
+            
+            if word == "go":
+                self.respond(
+                    random.choice([
+                        "Do you like to go there often?",
+                        "Why did you go there"
+                    ])
+                )
+            elif word == "do":
+                self.respond(
+                    random.choice([
+                        "You did?",
+                        "Tell me more about how you did that."
+                    ])
+                )
+            else:   
+                self.respond(
+                    random.choice([
+                    f"And do you like to {word}?",
+                    f"Tell me more about how you {word}?",
+                    f"Wait, you {word}ed? What do you mean?"
+                    ])
+                )
 
         elif context.relationship["is_relationship"]:
             person = context.relationship['name']
@@ -72,7 +87,7 @@ class Bot:
                 self.respond(
                     random.choice([
                         f"Well that not good at all.",
-                        f"{name}, that sounded very negative."
+                        f"{name}, that sounded very negative.",
                         f"I am sensing some negativity."
                     ])
                 )
@@ -98,13 +113,13 @@ class Bot:
                     "Hmm ok, so what then?",
                     "OK so, tell me more.",
                     "Mhmm... (awkward silence)",
-                    "Let's change the topic, im getting bored.",
+                    "Ok. Let's change the topic, im getting bored.",
                     "Cool, so wanna gossip about someone? Who should we talk about?",
                     "Anyways, why dont you tell me about someone in your life.",
                     "Anyways, done anything fun recently?",
                     "Btw, do you have any family here?",
                     "Oh almost forgot to ask, what did you do last night?",
                     "What else?",
-                    "Okay.\n Do anything fun last weekend?"
+                    "Okay. Do anything fun last weekend?"
                 ])
             )
