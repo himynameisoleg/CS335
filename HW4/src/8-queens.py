@@ -11,19 +11,26 @@ def generate_random_board():
 
 
 def hill_climbing_random(board, MAX_COST):
-    random_neighbor = generate_random_board()
-    best_board = hill_climbing(board)
+    best_board = list(board)
+    current_board = list(board)
     cost = 0
     solved = False
     
-    while cost < MAX_COST or solved:
-        random = hill_climbing(random_neighbor)
-        if number_attacking(random_neighbor) < number_attacking(best_board):
-            best_board = random
-        random_neighbor = generate_random_board()
+    while (solved == False and  cost < MAX_COST):
+        neighbor = list(get_neighbor(current_board))
         cost += 1
-        if number_attacking(best_board) == 0:
-            solved += 1
+
+        score_current = number_attacking(best_board)
+        score_neighbor = number_attacking(neighbor)
+
+        if number_attacking(neighbor) < number_attacking(best_board):
+            best_board = neighbor
+            current_board = neighbor
+
+        if  score_current == 0 or score_neighbor == 0:
+            solved = True
+            
+    # print(f'board returned: {best_board}')
 
     return { 
         "cost": cost,
@@ -35,7 +42,7 @@ def hill_climbing(board):
     current = board
 
     while True:    
-        neighbor = get_neighbor(board)
+        neighbor = list(get_neighbor(board))
         if number_attacking(neighbor) >= number_attacking(current):
             return current
         
@@ -43,7 +50,7 @@ def hill_climbing(board):
 
 
 def get_neighbor(board):
-    neighbor = board
+    neighbor = list.copy(board)
     neighbor[random.randint(0, 7)] = random.randint(0, 7)
     return neighbor
 
@@ -76,18 +83,19 @@ def number_attacking(board):
 
 
 def main():
-    num_puzzles = 1 #int(sys.argv[1])
+    num_puzzles = 350 #int(sys.argv[1])
 
-    MAX_COST = 9999
+    MAX_COST = 100
 
     hc_cost = 0
     hc_solved = 0
 
     for i in range(num_puzzles):
-        # board = generate_random_board()
-        board = [3, 4, 1, 6, 7, 2, 5, 4]
+        board = generate_random_board()
+        # board = [1, 3, 0, 2]
         hc = hill_climbing_random(board, MAX_COST)
-        hc_cost = hc["cost"]
+        hc_cost += hc["cost"]
+        print(f'run# {i}: cost: {hc["cost"]} | solved: {hc["solved"]}')
         if hc["solved"]: hc_solved += 1
 
     print(f"Hill-climbing: {hc_solved / num_puzzles}% solved, average cost: {hc_cost / num_puzzles}")
