@@ -4,6 +4,7 @@
 __author__="Oleg Perchyk"
 
 import random
+import math
 import sys
 
 def generate_random_board():
@@ -80,52 +81,62 @@ def number_attacking(board):
 
 
 def simulated_annealing(board, TMAX, TMIN, degrees):
-    current = list(board)
-    solved = False
-    cost = 0
+    current = { "board": list(board), "cost": 0, "solved": False }
     T = TMAX
 
-    while solved != True:
-        T = cool_down(T, degrees)
+    while current["solved"] != True:
+        if number_attacking(current["board"]) == 0:
+            current["solved"] = True
 
+        T = cool_down(T, degrees)
         if T <= TMIN:
             return current
         
-        neighbor = get_neighbor(current)
-        E = number_attacking(neighbor) - number_attacking(current)
+        # neighbor = get_random_neighbor(current["board"])
+        neighbor = generate_random_board()
+        current["cost"] += 1
+        E = number_attacking(neighbor) - number_attacking(current["board"])
 
         if E > 0:
-            current = list(neighbor)
-        else:
-            current = neighbor
+            current["board"] = list(neighbor)
+        elif(passes_probaility_test(E, T)):
+            current["board"] = neighbor
 
-        solved = True
-
-    return { "cost": cost, "solved": solved }
+    return current
 
 def cool_down(T, degrees):
     return T - degrees 
 
+def passes_probaility_test(E, T):
+    probability = pow(math.e, (E/T))
+    return random.random() < probability
+
+def get_random_neighbor(board):
+    neighbor = list.copy(board)
+    neighbor[random.randint(0, 7)] = random.randint(0, 7)
+    return neighbor
+
 def main():
-    num_puzzles = 25 #int(sys.argv[1])
+    # num_puzzles = 350
+    num_puzzles = int(sys.argv[1])
     MAX_COST = 2000
 
-    TMAX = 5000
-    TMIN = 10
-    cool_down_degrees = 5
+    TMAX = 10000
+    TMIN = 1
+    cool_down_degrees = 1
 
     hc_cost = 0
     hc_solved = 0
     sa_cost = 0
     sa_solved = 0
 
-    # for i in range(num_puzzles):
-    #     board = generate_random_board()
-    #     # board = [1, 3, 0, 2]
-    #     hc = hill_climbing_random(board, MAX_COST)
-    #     hc_cost += hc["cost"]
-    #     print(f'Hill Climbing run# {i}: cost: {hc["cost"]} | solved: {hc["solved"]}')
-    #     if hc["solved"]: hc_solved += 1
+    for i in range(num_puzzles):
+        board = generate_random_board()
+        # board = [1, 3, 0, 2]
+        hc = hill_climbing_random(board, MAX_COST)
+        hc_cost += hc["cost"]
+        print(f'Hill Climbing run# {i}: cost: {hc["cost"]} | solved: {hc["solved"]}')
+        if hc["solved"]: hc_solved += 1
 
     for i in range(num_puzzles):
         board = generate_random_board()
@@ -138,7 +149,7 @@ def main():
     print("======= DONE! ========")
 
     print(f"Hill-climbing: {(hc_solved / num_puzzles) * 100}% solved, average cost: {hc_cost / num_puzzles}")
-    print(f"Simulate-annealing: {(hc_solved / num_puzzles) * 100}% solved, average cost: {hc_cost / num_puzzles}")
+    print(f"Simulate-annealing: {(sa_solved / num_puzzles) * 100}% solved, average cost: {sa_cost / num_puzzles}")
 
 
 if __name__ == "__main__":
