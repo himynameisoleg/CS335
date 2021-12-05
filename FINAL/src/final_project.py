@@ -5,30 +5,51 @@ __author__="Oleg Perchyk"
 
 import sys
 import csv
-from probabilities_model import ProbabilitiesModel
+import re
+from word_probabilities_model import WordProbabilitiesModel
 
 def main():
     if sys.argv[1] == "help":
         show_help()
         exit()
     
-    words = get_words_from_argument()
+    words_metadata = get_words_from_argument()
 
-    review_probabilities = process_probabilities(words)
+    processed_words_metadata = process_movie_data(words_metadata)
     
 
 def get_words_from_argument():
-    words = sys.argv[1:]
-    # TODO: attach each word to a probability model  
-    return [word.lower() for word in words]
+    args = sys.argv[1:]
+    words = []
+    for arg in args:
+        words.append(WordProbabilitiesModel(arg.lower()))
+    
+    return words
+        
 
-def process_probabilities(words):
+def process_movie_data(words_metadata):
 
-    with open("movie") as csv_file:
+    with open("movie_data.csv") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
+
         for row in csv_reader:
-            print(row)
+            for i in range(len(words_metadata)):
+                if row[0].lower().find(words_metadata[i].word) != -1:
+                    count = sum(1 for _ in re.finditer(r'\b%s\b' % re.escape(words_metadata[i].word), row[0].lower()))
+                    
+                    words_metadata[i].total += count
+
+                    if row[1] == 'positive': words_metadata[i].positive += count
+                    elif row[1] == 'negative': words_metadata[i].negative += count
+
+
+            line_count += 1
+            # TODO: remove perf limiter
+            if line_count == 1000: 
+                return words_metadata
+    
+    return words_metadata
     
 
 help_msg = """
