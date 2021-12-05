@@ -9,14 +9,23 @@ import re
 from word_probabilities_model import WordProbabilitiesModel
 
 def main():
-    if sys.argv[1] == "help":
+    if sys.argv[1] == 'help':
         show_help()
         exit()
     
+    # input splitting phase
+    print('Parsing keywords from argument.')
     words_metadata = get_words_from_argument()
 
-    processed_words_metadata = process_movie_data(words_metadata)
-    
+    # processing phase
+    print(f'Processing movie data for keywords: {[item.word for item in words_metadata]}.')
+    processed = process_movie_data(words_metadata)
+
+    # analysis phase 
+    print('Analyzing probabilities.')
+    result = analyze_probabilities(processed)
+
+    print(f'Results: {result}')
 
 def get_words_from_argument():
     args = sys.argv[1:]
@@ -25,7 +34,7 @@ def get_words_from_argument():
         words.append(WordProbabilitiesModel(arg.lower()))
     
     return words
-        
+
 
 def process_movie_data(words_metadata):
 
@@ -33,29 +42,49 @@ def process_movie_data(words_metadata):
         csv_reader = csv.reader(csv_file, delimiter=',')
         line_count = 0
 
+        result = {
+            "total_positive": 0,
+            "total_negative": 0,
+            "words_metadata": words_metadata
+        }
+
         for row in csv_reader:
+            if row[1] == 'positive': result["total_positive"] += 1
+            elif row[1] == 'negative': result["total_negative"] += 1
+
             for i in range(len(words_metadata)):
                 if row[0].lower().find(words_metadata[i].word) != -1:
                     count = sum(1 for _ in re.finditer(r'\b%s\b' % re.escape(words_metadata[i].word), row[0].lower()))
-                    
-                    words_metadata[i].total += count
 
-                    if row[1] == 'positive': words_metadata[i].positive += count
-                    elif row[1] == 'negative': words_metadata[i].negative += count
+                    result["words_metadata"][i].total += count
+
+                    if row[1] == 'positive': result["words_metadata"][i].positive += count
+                    elif row[1] == 'negative': result["words_metadata"][i].negative += count
 
 
             line_count += 1
             # TODO: remove perf limiter
             if line_count == 1000: 
-                return words_metadata
+                return result
     
-    return words_metadata
-    
+    return result
+
+
+def analyze_probabilities(movie_data):
+    results = {
+        "probability_positive": 0.00,
+        "probability_negative": 0.00
+    }
+
+
+
+    return results
+
 
 help_msg = """
 final_project.py <command>
 
-Naive Bayes Movie review classifier based on words used in movie reviews. 
+Naive Bayes Movie Review Classifier based on keywords used in movie reviews. 
 
 Usage:
 
@@ -66,6 +95,7 @@ final_project.py help               show this help message and exit
 
 def show_help():
     print(help_msg)
-    
+  
+
 if __name__ == "__main__":
     main()
