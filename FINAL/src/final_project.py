@@ -8,6 +8,7 @@ import csv
 import re
 from word_probabilities_model import WordProbabilitiesModel
 
+
 def main():
     if sys.argv[1] == 'help':
         show_help()
@@ -17,15 +18,20 @@ def main():
     print('Parsing keywords from argument.')
     words_metadata = get_words_from_argument()
 
-    # processing phase
+    # data processing phase
     print(f'Processing movie data for keywords: {[item.word for item in words_metadata]}.')
-    processed = process_movie_data(words_metadata)
+    processed_data = process_movie_data(words_metadata)
+
+    # data normalizing phase
+    ALPHA = 1
+    normalized_data = normalize_data(processed_data, ALPHA)
 
     # analysis phase 
     print('Analyzing probabilities.')
-    result = analyze_probabilities(processed)
+    result = analyze_probabilities(normalized_data)
 
     print(f'Results: {result}')
+
 
 def get_words_from_argument():
     args = sys.argv[1:]
@@ -69,14 +75,26 @@ def process_movie_data(words_metadata):
     
     return result
 
+def normalize_data(movie_data, ALPHA):
+    has_zero_value = False
+
+    for word in movie_data["words_metadata"]:
+        if word.positive == 0 or word.negative == 0:
+            has_zero_value = True
+
+    if has_zero_value:
+        for word in movie_data["words_metadata"]:
+            word.positive += ALPHA
+            word.negative += ALPHA
+            word.total += (ALPHA * 2)
+
+    return movie_data
 
 def analyze_probabilities(movie_data):
     results = {
         "probability_positive": 0.00,
         "probability_negative": 0.00
     }
-
-
 
     return results
 
