@@ -6,8 +6,15 @@ __author__="Oleg Perchyk"
 import sys
 import csv
 import re
-from word_probabilities_model import WordProbabilitiesModel
 
+class WordProbabilitiesModel:
+    word = ""
+    positive = 0
+    negative = 0
+    total = 0
+
+    def __init__(self, word):
+        self.word = word
 
 def main():
     if sys.argv[1] == 'help':
@@ -19,7 +26,7 @@ def main():
     words_metadata = get_words_from_argument()
 
     # data processing phase
-    print(f'Processing movie data for keywords: {[item.word for item in words_metadata]}.')
+    print(f'Processing movie data for keywords: {[item.word for item in words_metadata]}...\n\n')
     processed_data = process_movie_data(words_metadata)
 
     # data normalizing phase
@@ -27,11 +34,8 @@ def main():
     normalized_data = normalize_data(processed_data, ALPHA)
 
     # analysis phase 
-    print('Analyzing probabilities.')
-    result = analyze_probabilities(normalized_data)
-
-    print(f'Results: {result}')
-
+    results = analyze_probabilities(normalized_data)
+    print_results(results)
 
 def get_words_from_argument():
     args = sys.argv[1:]
@@ -41,16 +45,15 @@ def get_words_from_argument():
     
     return words
 
-
 def process_movie_data(words_metadata):
 
     with open("movie_data.csv") as csv_file:
         csv_reader = csv.reader(csv_file, delimiter=',')
-        line_count = 0
 
         result = {
             "total_positive": 0,
             "total_negative": 0,
+            "total_words": 0,
             "words_metadata": words_metadata
         }
 
@@ -67,12 +70,8 @@ def process_movie_data(words_metadata):
                     if row[1] == 'positive': result["words_metadata"][i].positive += count
                     elif row[1] == 'negative': result["words_metadata"][i].negative += count
 
+        result["total_words"] = result["total_positive"] + result["total_negative"]
 
-            line_count += 1
-            # TODO: remove perf limiter
-            if line_count == 1000: 
-                return result
-    
     return result
 
 def normalize_data(movie_data, ALPHA):
@@ -85,19 +84,42 @@ def normalize_data(movie_data, ALPHA):
     if has_zero_value:
         for word in movie_data["words_metadata"]:
             word.positive += ALPHA
+            movie_data["total_positive"] += ALPHA
+
             word.negative += ALPHA
+            movie_data["total_negative"] += ALPHA
+
             word.total += (ALPHA * 2)
+
+    movie_data["total_words"] = movie_data["total_positive"] + movie_data["total_negative"]
 
     return movie_data
 
 def analyze_probabilities(movie_data):
-    results = {
-        "probability_positive": 0.00,
-        "probability_negative": 0.00
+    classification_positive = movie_data["total_positive"] / movie_data["total_words"]
+    classification_negative = movie_data["total_negative"] / movie_data["total_words"]
+
+    for word in movie_data["words_metadata"]:
+        prob_word_positive = word.positive / word.total
+        prob_word_negative = word.negative / word.total
+
+        classification_positive = classification_positive * prob_word_positive
+        classification_negative = classification_negative * prob_word_negative
+
+    return {
+        "movie_data": movie_data, 
+        "classification_positive": classification_positive,
+        "classification_negative": classification_negative
     }
 
-    return results
+def print_results(results):
+    classification = 'POSITIVE' if results["classification_positive"] > results["classification_negative"] else 'NEGATIVE'
 
+    print(f'''Naive Bayes calculation results for words {[item.word for item in results["movie_data"]["words_metadata"]]}:
+Positive = {results["classification_positive"]}
+Negative = {results["classification_negative"]}
+This combination of words is more likely to yeild a {classification} movie review. 
+''')
 
 help_msg = """
 final_project.py <command>

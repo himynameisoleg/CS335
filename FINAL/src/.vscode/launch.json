@@ -9,7 +9,7 @@
             "type": "python",
             "request": "launch",
             "program": "final_project.py",
-            "args": ["bad", "worst", "barfarvala"],
+            "args": ["great", "nice", "ok", "bad"],
             "console": "integratedTerminal"
         }
     ]
